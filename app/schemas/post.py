@@ -22,6 +22,14 @@ class PostDelete(BaseModel):
     password: str
 
 
+class PostPasswordCheck(BaseModel):
+    password: str
+
+
+class PasswordVerifyResult(BaseModel):
+    valid: bool
+
+
 class PostOut(PostBase):
     id: int
     category: str
