@@ -9,6 +9,10 @@ def get_post(db: Session, post_id: int) -> Post | None:
     return db.query(Post).filter(Post.id == post_id).first()
 
 
+def verify_post_password(post: Post, password: str) -> bool:
+    return post.password == password
+
+
 def list_posts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Post).order_by(Post.created_at.desc()).offset(skip).limit(limit).all()
 

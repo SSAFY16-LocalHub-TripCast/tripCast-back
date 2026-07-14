@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
-from app.schemas.post import PostCreate, PostDelete, PostOut, PostUpdate
-from app.services.post_service import create_post, delete_post, get_post, list_posts, update_post
+from app.schemas.post import PostCreate, PostDelete, PostOut, PostPasswordCheck, PasswordVerifyResult, PostUpdate
+from app.services.post_service import create_post, delete_post, get_post, list_posts, update_post, verify_post_password
 
 router = APIRouter(tags=['posts'])
 
@@ -32,6 +32,16 @@ def read_post(post_id: int, db: Session = Depends(get_db)):
 @router.post('/posts', response_model=PostOut, status_code=status.HTTP_201_CREATED)
 def create_new_post(post_in: PostCreate, db: Session = Depends(get_db)):
     return create_post(db, post_in)
+
+
+@router.post('/posts/{post_id}/verify-password', response_model=PasswordVerifyResult)
+def verify_post_password_route(post_id: int, password_in: PostPasswordCheck, db: Session = Depends(get_db)):
+    post = get_post(db, post_id)
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='게시글을 찾을 수 없습니다.')
+    if not verify_post_password(post, password_in.password):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='비밀번호가 일치하지 않습니다.')
+    return PasswordVerifyResult(valid=True)
 
 
 @router.put('/posts/{post_id}', response_model=PostOut)
