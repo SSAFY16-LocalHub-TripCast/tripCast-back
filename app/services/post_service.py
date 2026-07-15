@@ -31,13 +31,12 @@ def create_post(db: Session, post_in: PostCreate) -> Post:
 
 
 def update_post(db: Session, post: Post, post_in: PostUpdate) -> Post:
-    if post.password != post_in.password:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='비밀번호가 일치하지 않습니다.')
-
     if post_in.title is not None:
         post.title = post_in.title
     if post_in.content is not None:
         post.content = post_in.content
+    if post_in.password is not None:
+        post.password = post_in.password
 
     db.add(post)
     db.commit()
