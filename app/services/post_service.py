@@ -22,7 +22,7 @@ def create_post(db: Session, post_in: PostCreate) -> Post:
         title=post_in.title,
         content=post_in.content,
         password=post_in.password,
-        category='community',
+        category=post_in.category,
     )
     db.add(post)
     db.commit()
@@ -37,6 +37,8 @@ def update_post(db: Session, post: Post, post_in: PostUpdate) -> Post:
         post.content = post_in.content
     if post_in.password is not None:
         post.password = post_in.password
+    if post_in.category is not None:
+        post.category = post_in.category
 
     db.add(post)
     db.commit()

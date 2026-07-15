@@ -40,6 +40,7 @@ def test_create_read_update_and_verify_password(client):
             "title": "테스트 제목",
             "content": "테스트 내용",
             "password": "1234",
+            "category": "community",
         },
     )
     assert create_response.status_code == 201
@@ -60,6 +61,7 @@ def test_create_read_update_and_verify_password(client):
             "title": "수정된 제목",
             "content": "수정된 내용",
             "password": "5678",
+            "category": "travel",
         },
     )
     assert update_response.status_code == 200
@@ -82,6 +84,7 @@ def test_delete_post_requires_correct_password(client):
             "title": "삭제 테스트",
             "content": "삭제용 내용",
             "password": "abcd",
+            "category": "food",
         },
     )
     assert create_response.status_code == 201
